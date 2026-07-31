@@ -3,17 +3,25 @@ from pydantic import BaseModel
 
 hello_router = APIRouter()
 
-person_list = []
-
  # Person 클래스 정의
 class Person(BaseModel) :
     name : str
     age : int
 
-@hello_router.get("/hello")
-async def say_hello() -> dict :     # (key : value ..)
+person_list = []
+
+# Path Variable ( 경로 매개변수 )
+@hello_router.get("/hello/{name}")          # http://127.0.0.1:8000/hello/hong
+async def say_hello(name : str) -> dict :     # (key : value ..)
     return {
-        "message" : "hello nuri"
+        "message" : "hello nuri" + name
+    }
+
+# QueryString ( 쿼리 매개변수 )
+@hello_router.get("/hello2")
+async def say_hello(name : str) -> dict :     
+    return {
+        "message" : "hello nuri" + name
     }
 
 @hello_router.post("/hello")

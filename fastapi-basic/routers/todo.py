@@ -1,14 +1,31 @@
 # /todo - get(R), post(C), put(U), delete(D)
 
 from fastapi import APIRouter
+from pydantic import BaseModel
 
 todo_router = APIRouter()
 
+# Item model
+class Item(BaseModel) :
+    item : str
+    status : str
+
+# Todo model
+class Todo(BaseModel) :
+    item : int
+    status : Item
+
+# Todo list
+todo_list = []
+
+
 # C : Create
 @todo_router.post("/todo")
-async def create_todo() -> dict :    
+async def create_todo(todo : Todo) -> dict : 
+    todo_list.append(todo)   
     return {
-        "message" : "create !!"
+        "message" : "create !!",
+        "todo" : todo
     }
 
 # R : Read
