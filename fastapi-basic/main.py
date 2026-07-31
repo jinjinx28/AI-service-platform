@@ -14,14 +14,3 @@ async def welcome() -> dict :     # (key : value ..)
         "message" : "POST :: welcome to FastAPI world !!"
     }
 
-@app.get("/hello")
-async def say_hello() -> dict :     # (key : value ..)
-    return {
-        "message" : "hello nuri"
-    }
-
-@app.post("/hello")
-async def say_hello() -> dict :     # (key : value ..)
-    return {
-        "message" : "hello nuri"
-    }
