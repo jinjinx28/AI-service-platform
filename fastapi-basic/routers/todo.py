@@ -1,6 +1,6 @@
 # /todo - get(R), post(C), put(U), delete(D)
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Path
 from pydantic import BaseModel
 
 todo_router = APIRouter()
@@ -19,31 +19,38 @@ class Todo(BaseModel) :
 todo_list = []
 
 
-# C : Create
-@todo_router.post("/todo")
-async def create_todo(todo : Todo) -> dict : 
-    todo_list.append(todo)   
+# C : Create - all
+@todo_router.post("/todo/all")
+async def create_todo(todo : Todo) -> dict :   
     return {
-        "message" : "create !!",
-        "todo" : todo
+        "message :: All" : todo_list
     }
 
-# R : Read
-@todo_router.get("/todo")
-async def read_todo() -> dict :    
+# R : Read - id별 조회
+@todo_router.get("/todo/{id}")
+async def read_todo(id : int) -> dict : 
+    for todo in todo_list :   
+        if todo.id == id :
+            return {
+                "todo" : todo
+            }
     return {
         "message" : "read !!"
     }
 
 # U : Update
-@todo_router.put("/todo")
-async def update_todo() -> dict :    
+@todo_router.put("/todo/{id}")
+async def update_todo(new_item : Item, id : int = Path(..., title = "id")) -> dict :    
+    for todo in todo_list :
+        if todo.id ==id :
+            todo.item = new_item
+            return { "message" : "update 성공 !!" }
     return {
-        "message" : "update !!"
+        "message" : "id 확인 !!"
     }
 
 # D : delete
-@todo_router.delete("/todo")
+@todo_router.delete("/todo/{id}")
 async def delete_todo() -> dict :    
     return {
         "message" : "delete !!"
