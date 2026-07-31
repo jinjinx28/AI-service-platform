@@ -1,14 +1,14 @@
 from fastapi import APIRouter
 
-router = APIRouter()
+hello_router = APIRouter()
 
-@router.get("/hello")
+@hello_router.get("/hello")
 async def say_hello() -> dict :     # (key : value ..)
     return {
         "message" : "hello nuri"
     }
 
-@router.post("/hello")
+@hello_router.post("/hello")
 async def say_hello() -> dict :     # (key : value ..)
     return {
         "message" : "hello nuri"
