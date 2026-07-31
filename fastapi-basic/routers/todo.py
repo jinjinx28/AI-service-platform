@@ -49,9 +49,24 @@ async def update_todo(new_item : Item, id : int = Path(..., title = "id")) -> di
         "message" : "id 확인 !!"
     }
 
-# D : delete
-@todo_router.delete("/todo/{id}")
-async def delete_todo() -> dict :    
+# D : delete - 전체 삭제
+@todo_router.delete("/todo")
+async def delete_todo() -> dict :   
+    if len(todo_list) > 0 : 
+        todo_list.clear()
+        return {"message" : "delete 성공 !!"}
     return {
-        "message" : "delete !!"
+        "message" : "id 확인 !!"
+    }
+
+# D : delete - id별
+@todo_router.delete("/todo/{id}")
+async def delete_todo(id : int) -> dict :    
+    for index in len(todo_list) :
+        todo = todo_list[index]
+        if todo.id == id :
+            todo_list.pop(index)
+            return {"message" : "delete 성공 !!"}
+    return {
+        "message" : "id 확인 !!"
     }
