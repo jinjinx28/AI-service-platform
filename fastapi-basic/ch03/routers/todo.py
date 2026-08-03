@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Path
 from pydantic import BaseModel
 
 todo_router = APIRouter()
@@ -40,4 +40,17 @@ async def getId() -> dict :
     }
 
 # U 
+@todo_router.put("/todo/{id}")
+async def update_todo(todo_data : Todo, id : int = Path(...)) -> dict :
+    for todo in todo_list :
+        if todo.id == id :
+            todo.item = todo_data.item
+            return {
+                "message" : "todo 업데이트 성공"
+            }
+        
+    return {
+        "message" : "id가 존재하지 않습니다."
+    }
+
 # D
