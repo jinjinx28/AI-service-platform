@@ -1,0 +1,36 @@
+from fastapi import List, Field
+from pydantic import BaseModel, ConfigDict
+
+# TodoItem Model -> 전체 리스트 호출 시 실행
+class TodoItems(BaseModel) :
+    todos : List[TodoItem] = Field(default_factory = list)
+
+# TodoItem Model -> 요청 시 호출되는 모델 객체
+class TodoItem(BaseModel) :
+    item : str
+
+    model_config = ConfigDict(
+        json_schema_extra = {
+            "examples" : [
+                {
+                    "item" : "HTML"
+                }
+            ]
+        }
+    )
+
+# Todo Model
+class Todo(BaseModel) :
+    id : int
+    item : str
+
+    model_config = ConfigDict(
+        json_schema_extra =  {
+            "example" : [
+                {
+                    "id" : 1,
+                    "item" : "FastAPI 공부하기"
+                }
+            ]
+        }
+    )

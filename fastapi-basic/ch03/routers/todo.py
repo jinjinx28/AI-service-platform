@@ -1,12 +1,7 @@
 from fastapi import APIRouter, Path
-from pydantic import BaseModel
+from schemas.todo_schema import Todo, TodoItem, TodoItems
 
 todo_router = APIRouter()
-
-# Todo Model
-class Todo(BaseModel) :
-    id : int
-    item : str
 
 # todo_list
 todo_list = []
@@ -41,7 +36,7 @@ async def getId() -> dict :
 
 # U 
 @todo_router.put("/todo/{id}")
-async def update_todo(todo_data : Todo, id : int = Path(...)) -> dict :
+async def update_todo(todo_data : TodoItem, id : int = Path(...)) -> dict :
     for todo in todo_list :
         if todo.id == id :
             todo.item = todo_data.item
@@ -54,3 +49,30 @@ async def update_todo(todo_data : Todo, id : int = Path(...)) -> dict :
     }
 
 # D
+
+# all
+@todo_router.delete("/todo", response_model = TodoItems)
+async def deleteAll() -> dict :
+    if len(todo_list) > 0 :
+        todo_list.clear()
+        return {
+            "message" : "todo 삭제 성공"
+        }
+    return {
+        "message" : "todo_list가 존재하지 않습니다"
+    }
+
+# id
+@todo_router.delete("/todo/{id}")
+async def deleteId(id : int) -> dict :
+    for index in range(len(todo_list)) :
+        todo = todo_list[index]
+        if todo.id == id :
+            todo_list.pop(index)
+            return {
+                "message" : "todo 삭제 완료"
+            }
+        
+    return {
+        "message" : "id가 존재하지 않습니다"
+    }
