@@ -1,12 +1,11 @@
 # /books or /book => CRUD
-# Book = {
-#     id : int
-#     item : BookItem
-# }
-
-# BookItem = {
-#     title : str
-#     publisher : str
-#     price : int
-#     isbn : int
-# }
+# Book 클래스 = {
+#    id: int
+#    item: BookItem
+#}
+#BookItem 클래스 = {
+#    title: str
+#    publisher: str
+#    price: int
+#    isbn: int
+#}

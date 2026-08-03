@@ -1,72 +1,80 @@
-# /todo - get(R), post(C), put(U), delete(D)
-
 from fastapi import APIRouter, Path
 from pydantic import BaseModel
 
 todo_router = APIRouter()
 
 # Item model
-class Item(BaseModel) :
-    item : str
-    status : str
+class Item(BaseModel):
+    item: str
+    status: str
 
 # Todo model
-class Todo(BaseModel) :
-    item : int
-    status : Item
+class Todo(BaseModel):
+    id: int
+    item: Item
 
 # Todo list
-todo_list = []
+todo_list = []    
 
-
-# C : Create - all
-@todo_router.post("/todo/all")
-async def create_todo(todo : Todo) -> dict :   
+# C: Create
+@todo_router.post("/todo")
+async def create_todo(todo: Todo) -> dict:
+    todo_list.append(todo)
     return {
-        "message :: All" : todo_list
+        "message": "create!!",
+        "todo_list": todo_list
     }
 
-# R : Read - id별 조회
+# R: Read - all
+@todo_router.get("/todo/all")
+async def read_todo() -> dict:
+    return {
+        "message::All": todo_list
+    }
+
+# R: Read - id별 조회
 @todo_router.get("/todo/{id}")
-async def read_todo(id : int) -> dict : 
-    for todo in todo_list :   
-        if todo.id == id :
+async def read_todo(id: int) -> dict:
+    for todo in todo_list:
+        if todo.id == id:
             return {
-                "todo" : todo
+                "todo": todo
             }
     return {
-        "message" : "read !!"
+        "message": "read!!"
     }
 
-# U : Update
+
+# U: Update
 @todo_router.put("/todo/{id}")
-async def update_todo(new_item : Item, id : int = Path(..., title = "id")) -> dict :    
-    for todo in todo_list :
-        if todo.id ==id :
+async def update_todo(new_item:Item, id:int = Path(..., title="id")) -> dict:
+    for todo in todo_list:
+        if  todo.id == id:
             todo.item = new_item
-            return { "message" : "update 성공 !!" }
+            return { "message": "update 성공!!"}
     return {
-        "message" : "id 확인 !!"
+        "message": "id 확인!!"
     }
 
-# D : delete - 전체 삭제
+
+# D: Delete - 전체 삭제 
 @todo_router.delete("/todo")
-async def delete_todo() -> dict :   
-    if len(todo_list) > 0 : 
+async def delete_todo() -> dict:
+    if len(todo_list) > 0:
         todo_list.clear()
-        return {"message" : "delete 성공 !!"}
+        return { "message": "삭제 성공!!"}
     return {
-        "message" : "id 확인 !!"
+        "message": "데이터 없음!!"
     }
 
-# D : delete - id별
+# D: Delete - id별 
 @todo_router.delete("/todo/{id}")
-async def delete_todo(id : int) -> dict :    
-    for index in len(todo_list) :
+async def delete_todo(id: int) -> dict:
+    for index in range(len(todo_list)):
         todo = todo_list[index]
-        if todo.id == id :
+        if todo.id == id:
             todo_list.pop(index)
-            return {"message" : "delete 성공 !!"}
+            return { "message": "삭제 성공!!"}
     return {
-        "message" : "id 확인 !!"
+        "message": "id 확인!!"
     }
