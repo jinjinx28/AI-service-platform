@@ -1,11 +1,11 @@
 # ----------------------------------------------
 #  도서 관리 애플리케이션 - CRUD
 # ----------------------------------------------
-from fastapi import APIRouter, Depends, HTTPException, status
-from schemas.book_schema import Book, Book_Item
-
+from fastapi import APIRouter, Depends, HTTPException, status, Path
+from schemas.book_schema import Book, Book_Item, Books
 from database import get_db
 from sqlalchemy.orm import Session
+from sqlalchemy import select, delete
 from models.book_model import BookModel
 
 
@@ -31,8 +31,59 @@ async def add_book(book_data: Book_Item,
 
 
 # R: Select All
+@book_router.get("/books",
+                    response_model=Books) # [{Book}, {Book} ...]
+async def get_all(db:Session=Depends(get_db)):
+    books = db.execute(
+        select(BookModel).order_by(BookModel.id)
+    ) # [{}, ...]
+
+    result = books.scalars().all()
+    
+    return {
+        "books": result
+    }
+
+
 # R: Select Id
+@book_router.get("/book/{id}",
+                    response_model=Book)
+async def get_id(id: int,
+                    db: Session=Depends(get_db)) -> dict:
+    book = db.get(BookModel, id)  # Select 쿼리 생성, 전송 <-- DB
+
+    if book is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Id does not exist"
+        )
+
+    return book
+
+
 # U: Update
+@book_router.put("/book/{id}",
+                    response_model=Book)
+async def update(new_data:Book_Item, 
+                    id: int = Path(...),
+                    db: Session = Depends(get_db)) -> dict:
+    book = db.get(BookModel, id)
+
+    if book is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Id does not exist!!"
+        )
+
+    book.title = new_data.title
+    book.price = new_data.price
+    book.isbn = new_data.isbn
+
+    db.commit()
+    db.refresh(book)
+
+    return book
+
+
 # D: Delete All
 # D: Delete Id
-s
