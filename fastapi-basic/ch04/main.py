@@ -8,5 +8,11 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+@app.get("/")
+async def welcome() :
+    return {
+        "message" : "database connection test !!"
+    }
+
 #app.include_router(todo_router) # todo 애플리케이션
 app.include_router(book_router) # 도서관리 애플리케이션
