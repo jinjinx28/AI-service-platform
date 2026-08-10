@@ -6,10 +6,10 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
-# fastapi-basic 경로 가져오기
-BASE_DIR = Path(__file__).resolve().parents[0]
+# .env 경로 가져오기
+BASE_DIR = Path(__file__).resolve().parents[1]
 
-# fastapi-basic/.env 읽기
+# fastapi-shoppy-server/.env 읽기
 load_dotenv(BASE_DIR / ".env")
 
 DB_USER=os.getenv("DB_USER")
