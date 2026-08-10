@@ -3,7 +3,7 @@ import { useAuthStore } from "../store/authStore";
 
 //(1) 쿠키를 자동으로 주고받으려면 전역 설정 필수, axios 대신 instance 객체가 쿠키포함 처리하도록 수정
 const instance = axios.create({
-  baseURL: "http://localhost:8001",
+  baseURL: "http://127.0.0.1:8000",
   withCredentials: true, // 모든 요청에 쿠키 자동 첨부
 });
 
@@ -109,7 +109,6 @@ export const axiosGet = async (path) => {
 };
 
 export const axiosPost = async (path, data) => {
-  // const url = `http://172.30.1.81:9000${path}`;
   const res = await instance.post(path, data);
   return res.data;
 };

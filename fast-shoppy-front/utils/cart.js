@@ -59,4 +59,3 @@ export function cartItemsCheck(prevItems, cartItem) { //{pid:1, size:'XS', qty:1
 }
 
 
-

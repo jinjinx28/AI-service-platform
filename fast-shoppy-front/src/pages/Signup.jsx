@@ -26,9 +26,21 @@ export default function Signup() {
     if (!form.pwd) { setErrors(p => ({ ...p, pwd: '비밀번호를 입력해주세요' })); return; }
     if (form.pwd !== form.cpwd) { setErrors(p => ({ ...p, cpwd: '비밀번호가 일치하지 않습니다' })); return; }
     
+    // console.log('form=>', form)
+    const fastForm = {
+      "id": form.id,
+      "pwd": form.pwd,
+      "name": form.name,
+      "phone": form.phone,
+      "email": form.emailName+"@"+form.emailDomain
+    }
+    // console.log('fastForm=>', fastForm)
     
     try {
-      const result = await axiosPost('/member/signup', form);   
+      const result = await axiosPost('/api/member/signup', fastForm);  
+      console.log('result ==>> ', result);
+      
+      
       if(result.isSignup) navigate('/login');      
     } catch (error) {
       console.log('Signup Error ::', error);      
